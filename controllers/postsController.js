@@ -4,7 +4,17 @@ const connection = require('../data/database')
 //index
 const index = (req, res) => {
     
-  res.json({posts})
+ const sql = 'SELECT * FROM posts';
+
+ connection.query(sql, (err, results) => {
+    if (err) {
+        return res.status(500).json({
+        error: 'il database ha fallito'})
+    };
+
+    req.json(results);
+
+ })
 }
 
 // const index = (req, res) => {
