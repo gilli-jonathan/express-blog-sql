@@ -25,19 +25,19 @@ const index = (req, res) => {
 // show
 const show = (req, res) => {
 
-    const id = Number(req.params.id)
+    const id = req.params.id
 
-    const trovato = posts.find(post => post.id === id)
+    const sql = 'SELECT * FROM posts WHERE id = ?';
+    connection.query(sql, [id], (err, results) => {
+        if (err) return res.status(500).json({
+            error: 'il server è in vacanza'
+        });
+        if (results.length === 0) return res.status(404).json({
+            error: 'post non trovato... tanto meglio non era nemmeno così bello'
+        });
 
-        if (!trovato) {
-        return res.status(404).json({
-            error: true,
-            message: 'il post è troppo timido per farsi vedere'
-        })
-    }
-
-    res.json(trovato)
-
+        res.json(results[0]);
+    })
 
 };
 
