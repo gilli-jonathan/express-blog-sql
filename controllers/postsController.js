@@ -98,20 +98,14 @@ res.send(`Modifica piccolina del post ${req.params.id}`);
 // destroy
 const destroy = (req, res)=>{
 
-    const id = Number(req.params.id)
-    const target = posts.find(post => post.id === id)
+    const {id} = req.params;
 
-    if (!target) {
-        return res.status(404).json({
-            error: true,
-            message: 'heheh lo hai mancato'
-        })
-    }
+    connection.query('DELETE FROM posts WHERE id = ?', [id], (err) => {
+        if (err) return res.status(500).json({ error: 'HAI FALLITO HAHA, ADESSO QUESTO POST VERRA A CERCARTI PER ELIMINARTI A SUA VOLTA'})
 
-    posts.splice(posts.indexOf(target), 1)
-    console.log(posts);
+        res.sendStatus(204)
+    });
 
-    res.sendStatus(204)
 }
 
 module.exports = {index, show, store, update, modify, destroy}
